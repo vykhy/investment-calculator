@@ -1,0 +1,116 @@
+<html>
+<head>
+<title>calculate your salary</title>
+<body>
+	initial salary: <input id='salary' type='number'><br>
+	years: <input id='years' type='number'><br>
+	DA Rate: <input id='daRate' type='number'><br>
+	projected DA growth: <input id='daGrowth' type='number'><br>
+	TA: <input id='ta' type='number'><br><br>
+
+	<!-- CSS only -->
+<link rel = 'stylesheet 'href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+	<input type = 'button' id = 'calculate' value="calculate"><br><br>
+
+	<table id = 'table' class = 'table table-bordered'>
+
+		<tr>
+			<th>year</th>
+			<th>basic pay</th>
+			<th>DA</th>
+			<th>HRAx</th>
+			<th>HRAy</th>
+			<th>HRAz</th>
+			<th>TA</th>
+			<th>total-x</th>
+			<th>total-y</th>
+			<th>total-z</th>
+			<th>annual (x-rate)</th>
+			<th>total salary in life (x-rate)</th>
+		</tr>
+	</table>
+
+	<script>
+
+		class Year{
+			constructor(year,basic,da,hrax,hray,hraz,ta,totalx,totaly,totalz,annual,total){
+				this.year = year;
+				this.basic = basic;
+				this.da = da;
+				this.hrax = hrax;
+				this.hray = hray;
+				this.hraz = hraz;
+				this.ta = ta;
+				this.totalx = totalx;
+				this.totaly = totaly;
+				this.totalz = totalz;
+				this.annual = annual;
+				this.total = total;
+			}
+			
+		}		
+
+		function calculate(){
+
+			let basic = document.getElementById('salary').value;
+			let years = document.getElementById('years').value;
+			let daRate = document.getElementById('daRate').value;
+			let daGrowth = document.getElementById('daGrowth').value;
+			let da =0;
+			let hrax = 0;
+			let hray = 0;
+			let hraz = 0;
+			let totalx = 0;
+			let totaly = 0;
+			let totalz = 0;
+			let annual = 0;
+			let total = 0;
+
+			for(let i = 0, l = years; i<l ; i++){
+
+				let ta = document.getElementById('ta').value;
+				basic = basic * 1.03;
+				da = basic * (daRate/100);
+				hrax = (basic * (24/100)) + (((basic * (24/100)) * daRate/100));
+				hray = (basic * (16/100)) + (((basic * (16/100)) * daRate/100));
+				hraz = (basic * (8/100)) + (((basic * (8/100)) * daRate/100));
+				totalx = parseInt(basic + da + hrax + ta);
+				totaly = parseInt(basic + da + hray + ta);
+				totalz = parseInt(basic + da + hraz + ta);
+				annual = totalx * 12;
+				total = total + annual;
+
+				const now = new Year(i+1,basic.toFixed(2),da.toFixed(2),hrax.toFixed(2),hray.toFixed(2),hraz.toFixed(2),ta,totalx.toFixed(2),totaly.toFixed(2),totalz.toFixed(2),annual.toFixed(2),total.toFixed(2));
+
+				let table = document.getElementById('table');
+				let row = document.createElement('TR');
+
+				row.innerHTML = `
+				<tr>
+					<td>${now.year}</td>
+					<td>${now.basic}</td>
+					<td>${now.da}</td>
+					<td>${now.hrax}</td>
+					<td>${now.hray}</td>
+					<td>${now.hraz}</td>
+					<td>${now.ta}</td>
+					<td>${now.totalx}</td>
+					<td>${now.totaly}</td>
+					<td>${now.totalz}</td>
+					<td>${now.annual}</td>
+					<td>${now.total}</td>
+					</tr>
+				`
+
+				table.appendChild(row);
+
+			}
+		}
+
+		document.getElementById('calculate').addEventListener('click', calculate);
+	</script>
+
+</body>
+</head>
+</html>
